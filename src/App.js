@@ -1,9 +1,13 @@
+import "./style.css";
+import { useState } from "react";
+
 import CategoryFilter from "./components/CategoryFilter";
 import FactList from "./components/FactList";
 import NewFactForm from "./components/NewFactForm";
-import "./style.css";
 
 const App = () => {
+  const [showForm, setShowForm] = useState(false);
+
   return (
     <>
       {/* TODO: Create header component */}
@@ -18,10 +22,15 @@ const App = () => {
           <h1>Daily Discoveries</h1>
         </div>
 
-        <button className="btn btn-large btn-open">Share a fact</button>
+        <button
+          className="btn btn-large btn-open"
+          onClick={() => setShowForm((showForm) => !showForm)}
+        >
+          Share a fact
+        </button>
       </header>
 
-      <NewFactForm />
+      {showForm && <NewFactForm />}
 
       <main className="main">
         <CategoryFilter />
