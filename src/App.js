@@ -1,21 +1,31 @@
 import "./style.css";
 import { useEffect, useState } from "react";
+import supabase from "./supabase";
 
 import CategoryFilter from "./components/CategoryFilter";
 import FactList from "./components/FactList";
 import NewFactForm from "./components/NewFactForm";
 import Header from "./components/Header";
-import supabase from "./supabase";
+import Loader from "./components/Loader";
 
 const App = () => {
   const [showForm, setShowForm] = useState(false);
   const [facts, setFacts] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const getFacts = async () => {
-      const { data: facts, error } = await supabase.from("facts").select("*");
+      setIsLoading(true);
+      const { data: facts, error } = await supabase
+        .from("facts")
+        .select("*")
+        .order("votesInteresting", { ascending: false })
+        .limit(100);
 
-      setFacts(facts);
+      if (!error) setFacts(facts);
+      else alert("There was a problem getting data.");
+
+      setIsLoading(false);
     };
 
     getFacts();
@@ -31,7 +41,7 @@ const App = () => {
 
       <main className="main">
         <CategoryFilter />
-        <FactList facts={facts} />
+        {isLoading ? <Loader /> : <FactList facts={facts} />}
       </main>
     </>
   );
