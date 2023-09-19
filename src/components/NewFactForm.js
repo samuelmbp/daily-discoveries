@@ -1,15 +1,47 @@
 import { useState } from "react";
 import { CATEGORIES } from "../utils/constants";
 
-const NewFactForm = () => {
+const isValidHttpUrl = (string) => {
+  let url;
+
+  try {
+    url = new URL(string);
+  } catch (_) {
+    return false;
+  }
+
+  return url.protocol === "http:" || url.protocol === "https:";
+};
+
+const NewFactForm = ({ setFacts, setShowForm }) => {
   const [text, setText] = useState("");
-  const [source, setSource] = useState("");
+  const [source, setSource] = useState("http://example.com");
   const [category, setCategory] = useState("");
   const textLength = text.length;
 
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(text, source, category);
+
+    if (text && isValidHttpUrl(source) && category && text.length <= 200) {
+      const newFact = {
+        id: Math.round(Math.random() * 1000_000),
+        text,
+        source,
+        category,
+        votesInteresting: 0,
+        votesMindblowing: 0,
+        votesFalse: 0,
+        createdIn: new Date().getFullYear(),
+      };
+
+      setFacts((facts) => [newFact, ...facts]);
+
+      setText("");
+      setSource("");
+      setCategory("");
+      setShowForm(false);
+    }
   };
 
   return (
