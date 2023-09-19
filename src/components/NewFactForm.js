@@ -1,17 +1,6 @@
 import { useState } from "react";
 import { CATEGORIES } from "../utils/constants";
-
-const isValidHttpUrl = (string) => {
-  let url;
-
-  try {
-    url = new URL(string);
-  } catch (_) {
-    return false;
-  }
-
-  return url.protocol === "http:" || url.protocol === "https:";
-};
+import { isValidHttpUrl } from "../utils/isValidHttpUrl";
 
 const NewFactForm = ({ setFacts, setShowForm }) => {
   const [text, setText] = useState("");
