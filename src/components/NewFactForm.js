@@ -21,7 +21,7 @@ const NewFactForm = ({ setFacts, setShowForm }) => {
         .select();
       setIsUploading(false);
 
-      setFacts((facts) => [newFact[0], ...facts]);
+      if (!error) setFacts((facts) => [newFact[0], ...facts]);
 
       setText("");
       setSource("");
